@@ -51,22 +51,22 @@ if st.button('Render'):
 
 
 
-if st.button("I'm distracted.", key="timestamp_button"):
+if st.button("I'm distracted.", key="distraction"):
     try:
         # Use the custom component's return value to receive the timestamp
-        js_code = """let video = document.querySelector("video");
-
-            function sendVideoTimestamp() {
-                const currentTimestamp = video.currentTime;
-                Streamlit.setComponentValue(currentTimestamp);
-            }
-            sendVideoTimestamp();
-            """
-        
-        currentTimestamp = st_javascript(js_code)
+        js_code = """
+        function getCurrentTime() {
+            var video = document.getElementsByClassName("stVideo")[0]; // Assuming there is only one element with the class "stVideo"
+            console.log(video.currentTime);
+            return video.currentTime;
+        }
+        var timestamp = getCurrentTime();
+        """
+        js_code_2 = '(document.getElementsByClassName("stVideo")[0]).currentTime'
+        currentTimestamp = st_javascript(js_code_2, key="timestamp")
 
         # timestamp_value = st.components.v1.html(js_code, height=0)
-        print(currentTimestamp)
+        print(f"Current timestamp: {currentTimestamp}")
 
         # Display the timestamp in Streamlit
         st.write("Current Timestamp:", currentTimestamp, "seconds")
