@@ -1,4 +1,4 @@
-
+import openai
 
 class TranscriptSegmenter:
     def __init__(self, model="gpt-3.5-turbo", temperature=0):
