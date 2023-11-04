@@ -18,7 +18,7 @@ def upload_image():
    img = Image.open(file.stream).convert('L')
    img.show()
 
-   return {"data": "louda"}
+   return {"data": "whatever"}
 
  
 if __name__ == '__main__':
