@@ -1,2 +1,3 @@
 lib/__pycache__/*
 adhd-fe/package-lock.json
+adhd-fe/node-modules/*
