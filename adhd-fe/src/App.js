@@ -26,7 +26,7 @@ function App() {
 
   const sendTimestampToBackend = async (timestamp) => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/YO', {
+      const response = await fetch('http://127.0.0.1:8000/update_timestamp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
