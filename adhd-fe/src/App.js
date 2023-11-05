@@ -1,16 +1,49 @@
 import { Container, Button, Grid, Typography } from "@mui/material";
 import "./App.css";
-import VideoContent from "./river.mp4";
 import Webcam from "react-webcam";
 import { useEffect, useRef } from "react";
 
 function App() {
   const webCamRef = useRef(null);
-  setInterval(() => {
-    if (webCamRef == null || webCamRef.current === null) return;
-    const imageSrc = webCamRef.current.getScreenshot();
-    console.log(imageSrc);
-  }, 1000);
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (webCamRef.current && videoRef.current) {
+        const video = videoRef.current;
+        const currentTime = video.currentTime;
+        console.log(currentTime);
+        
+        // Send the currentTime to the Python backend
+        sendTimestampToBackend(currentTime);
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  const sendTimestampToBackend = async (timestamp) => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/YO', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ timestamp }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.message);
+      } else {
+        console.error('Failed to send timestamp to the backend');
+      }
+    } catch (error) {
+      console.error('Error sending timestamp:', error);
+    }
+  };
 
   return (
     <Container
@@ -21,8 +54,6 @@ function App() {
         flex: 1,
       }}
     >
-      <h1>ADHD 4 lyf</h1>
-
       <Grid container spacing={5} style={{ marginTop: 32 }}>
         <Grid
           item
@@ -31,13 +62,13 @@ function App() {
           lg={5}
           style={{ marginRight: window.innerWidth / 10 }}
         >
-          <Typography variant="h4">Study Video</Typography>
           <video
+            ref={videoRef} // Add a ref to the video element
             controls
             autoPlay
             loop
             muted
-            src={VideoContent}
+            src={require("./2-Minute Neuroscience_ Autism.mp4")} // You need to use require to specify the video source correctly
             style={{
               width: window.innerWidth / 2.5,
               height: window.innerHeight / 2.5,
@@ -46,7 +77,6 @@ function App() {
         </Grid>
 
         <Grid item xs={5} md={5} lg={5}>
-          <Typography variant="h4">Thou fuck thy</Typography>
           <Webcam
             ref={webCamRef}
             imageSmoothing={true}
