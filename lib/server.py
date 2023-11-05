@@ -32,7 +32,7 @@ def read_root():
 def read_root():
     return {"message": "Hello, World"}
 
-@app.post("/segment_transcript")
+@app.get("/segment_transcript")
 def segment_transcript(text: str):
     
     try:
@@ -46,7 +46,7 @@ def segment_transcript(text: str):
         return {"error":f"An Error occured: {e}"}
 
 
-@app.post("/find_section_by_second")
+@app.get("/find_section_by_second")
 def find_section_by_second(second: int, dataframe,sections_dict):
     
     # sections_dict = transcript_segmenter.sections_dict
@@ -58,7 +58,7 @@ def find_section_by_second(second: int, dataframe,sections_dict):
     return section_title, content
 
 
-@app.post("/generate_questions/")
+@app.get("/generate_questions/")
 async def generate_questions(section_content, dataframe,sections_dict):
     try:
         # sections_dict = transcript_segmenter.sections_dict
@@ -73,14 +73,14 @@ async def generate_questions(section_content, dataframe,sections_dict):
     except Exception as e:
         return {"error": f"An error occurred: {str(e)}"}
 
-@app.post("/transcribe")
+@app.get("/transcribe")
 async def transcribe_api(video_path):
     whisper_obj = Whisper(video_path)
     transcription = whisper_obj.transcribe()
     return transcription
 
 
-@app.post("/create_summary")
+@app.get("/create_summary")
 async def create_summary(text):
     
     try:
